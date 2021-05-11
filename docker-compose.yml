@@ -1,0 +1,32 @@
+version: '3'
+# https://github.com/jfrog/artifactory-docker-examples/blob/master/docker-compose/artifactory/artifactory-oss-postgresql.yml
+services:
+  app:
+    # https://www.jfrog.com/confluence/display/JFROG/Artifactory+Release+Notes
+    image: docker.bintray.io/jfrog/artifactory-cpp-ce
+    environment:
+      JF_SHARED_DATABASE_TYPE: postgresql
+      # The following must match the POSTGRES_USER and POSTGRES_PASSWORD values passed to PostgreSQL
+      JF_SHARED_DATABASE_USERNAME: ${DB_USER:-jfrog}
+      JF_SHARED_DATABASE_PASSWORD: ${DB_PASSWORD:-secret}
+      JF_SHARED_DATABASE_URL: jdbc:postgresql://db:5432/${DB_NAME:-artifactory}
+      JF_SHARED_DATABASE_DRIVER: org.postgresql.Driver
+    ports:
+      - 8081:8081
+      - 8082:8082
+    volumes:
+      - jfrogdata:/var/opt/jfrog/artifactory
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: ${DB_NAME:-artifactory}
+      POSTGRES_USER: ${DB_USER:-jfrog}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+    driver: local
+  jfrogdata:
+    driver: local
