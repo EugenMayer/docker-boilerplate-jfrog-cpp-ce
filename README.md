@@ -14,6 +14,11 @@ Either use this as a starter or even in production, be sure to use `.env` to def
 docker-compose up -d
 ```
 
+The access via `http://localhost:8081` which will redirect you to `http://localhost:8082`
+
+Default user: `admin`
+Default password: `password`
+
 ### Configuration
 
 Via `.env`
